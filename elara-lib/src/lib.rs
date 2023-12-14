@@ -113,16 +113,14 @@ impl Default for Game {
     }
 }
 
-fn get_avail_funcs(level: &'static dyn Level, unlocked_funcs: &Vec<String>) -> Vec<String> {
+fn get_avail_funcs(level: &'static dyn Level, unlocked_funcs: &[String]) -> Vec<String> {
     // Store avail_funcs in a set
-    let mut avail_funcs = HashSet::new();
-    for func in unlocked_funcs {
-        avail_funcs.insert(func.clone());
-    }
-    for &func in level.disabled_functions() {
-        avail_funcs.remove(func);
-    }
-    avail_funcs.into_iter().collect()
+    let disabled: HashSet<&str> = level.disabled_functions().iter().copied().collect();
+    unlocked_funcs
+        .iter()
+        .filter(|func| !disabled.contains(func.as_str()))
+        .cloned()
+        .collect()
 }
 
 impl Game {
