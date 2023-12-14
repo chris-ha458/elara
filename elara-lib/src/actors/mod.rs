@@ -61,52 +61,25 @@ impl Bounds {
 }
 
 fn is_obstacle_at(state: &State, pos: &Pos) -> bool {
-    for obstacle in &state.obstacles {
-        if obstacle.pos == *pos {
-            return true;
-        }
-    }
-    // Data points are treated as simple obstacles since
-    // they can never move or be opened.
-    for data_point in &state.data_points {
-        if data_point.pos == *pos {
-            return true;
-        }
-    }
-    // Buttons can also not be moved.
-    for button in &state.buttons {
-        if button.pos == *pos {
-            return true;
-        }
-    }
-    false
+    // Data points are treated as simple obstacles since they can never move or be opened.
+    state.data_points.iter().any(|o| o.pos == *pos)
+        || state.obstacles.iter().any(|o| o.pos == *pos)
+        || state.buttons.iter().any(|o| o.pos == *pos) // Buttons can also not be moved.
 }
 
 fn is_closed_gate_at(state: &State, pos: &Pos) -> bool {
-    for gate in &state.gates {
-        if gate.pos == *pos && !gate.open {
-            return true;
-        }
-    }
-    false
+    state.gates.iter().any(|g| g.pos == *pos && !g.open)
 }
 
 fn is_closed_password_gate_at(state: &State, pos: &Pos) -> bool {
-    for gate in &state.password_gates {
-        if gate.pos == *pos && !gate.open {
-            return true;
-        }
-    }
-    false
+    state
+        .password_gates
+        .iter()
+        .any(|g| g.pos == *pos && !g.open)
 }
 
 fn get_telepad_at(state: &State, pos: &Pos) -> Option<Telepad> {
-    for telepad in &state.telepads {
-        if telepad.start_pos == *pos {
-            return Some(telepad.clone());
-        }
-    }
-    None
+    state.telepads.iter().find(|t| t.start_pos == *pos).cloned()
 }
 
 fn is_outside_bounds(bounds: &Bounds, pos: &Pos) -> bool {
