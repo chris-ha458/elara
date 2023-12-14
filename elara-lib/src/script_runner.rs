@@ -781,12 +781,13 @@ fn set_engine_config(engine: &mut Engine) {
 
 fn set_engine_safeguards(engine: &mut Engine) {
     // See https://rhai.rs/book/safety/
-    engine.set_max_string_size(1_000);
-    engine.set_max_array_size(100);
-    engine.set_max_map_size(100);
-    engine.set_max_operations(10_000);
-    engine.set_max_call_levels(32);
-    engine.set_max_expr_depths(64, 32);
+    engine
+        .set_max_string_size(1_000)
+        .set_max_array_size(100)
+        .set_max_map_size(100)
+        .set_max_operations(10_000)
+        .set_max_call_levels(32)
+        .set_max_expr_depths(64, 32);
 }
 
 fn set_print_fn(engine: &mut Engine) {
